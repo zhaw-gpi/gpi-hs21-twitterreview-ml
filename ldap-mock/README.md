@@ -1,0 +1,1 @@
+In diesem Ordner wird später im Semester ein LDAP-System gemockt.

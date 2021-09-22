@@ -1,0 +1,1 @@
+In diesem Ordner wird später im Semester der Twitter Service erstellt, welcher als External Task Client die im Twitter-Review-Prozess bewilligten Tweets auf Twitter postet.
