@@ -243,20 +243,15 @@
       <bpmn:outgoing>Flow_09kfwsd</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:task id="BenutzerinformationenAuslesenTask" name="Benutzerinformationen auslesen">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:outputParameter name="checkResult">rejected</camunda:outputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_09kfwsd</bpmn:incoming>
       <bpmn:outgoing>Flow_0pe345c</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:scriptTask id="TweetTextAutomatischPrufenTask" name="Tweet-Text automatisch prüfen" scriptFormat="JavaScript">
+    <bpmn:scriptTask id="TweetTextAutomatischPrufenTask" name="Tweet-Text automatisch prüfen" scriptFormat="JavaScript" camunda:resultVariable="checkResult">
       <bpmn:incoming>Flow_0pe345c</bpmn:incoming>
       <bpmn:outgoing>Flow_0z4adnm</bpmn:outgoing>
-      <bpmn:script>tc = execution.getVariable("tweetContent");
-var indexOfGpi = tc.toLowerCase().indexOf("gpi");
-execution.setVariable("checkResult", (indexOfGpi == -1 ? "manualCheckRequired" : "rejected"));</bpmn:script>
+      <bpmn:script>var result;
+
+result = (tweetContent.toLowerCase().indexOf("gpi") == -1 ? "manualCheckRequired" : "rejected");</bpmn:script>
     </bpmn:scriptTask>
   </bpmn:process>
   <bpmn:error id="Error_0cztbkf" name="DuplicateError" errorCode="DuplicateTweet" />
