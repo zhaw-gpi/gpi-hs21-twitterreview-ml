@@ -195,7 +195,7 @@
 
 result = (tweetContent.toLowerCase().indexOf("gpi") == -1 ? "manualCheckRequired" : "rejected");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:task id="BenutzerinformationenAuslesenTask" name="Benutzerinformationen auslesen">
+    <bpmn:task id="BenutzerinformationenAuslesenTask" name="Benutzerinformationen auslesen" camunda:asyncBefore="true">
       <bpmn:incoming>Flow_09kfwsd</bpmn:incoming>
       <bpmn:outgoing>Flow_0pe345c</bpmn:outgoing>
     </bpmn:task>
@@ -204,6 +204,11 @@ result = (tweetContent.toLowerCase().indexOf("gpi") == -1 ? "manualCheckRequired
         <camunda:formData>
           <camunda:formField id="tweetContent" label="Gewünschter Tweet" type="string" />
         </camunda:formData>
+        <camunda:executionListener event="end">
+          <camunda:script scriptFormat="JavaScript">var tweetContentShort = tweetContent.substring(0,10);
+
+execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetContentShort);</camunda:script>
+        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_09kfwsd</bpmn:outgoing>
     </bpmn:startEvent>

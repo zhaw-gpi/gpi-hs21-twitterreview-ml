@@ -27,10 +27,10 @@ public class ProcessApplicationRestController {
     }
 
     @PostMapping(value="/cancel-twitter-review")
-    public ResponseEntity<String> cancelTwitterReview(String tweetToCancel) {
+    public ResponseEntity<String> cancelTwitterReview(String businessKey) {
         processEngine.getRuntimeService()
             .createMessageCorrelation("MessageCancelTwitterReview")
-            .processInstanceVariableEquals("tweetContent", tweetToCancel)
+            .processInstanceBusinessKey(businessKey)
             .correlate();
 
         return new ResponseEntity<>(HttpStatus.OK);
