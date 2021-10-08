@@ -188,13 +188,6 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_14fz7kr" sourceRef="TweetAnfragePrufenTask1" targetRef="Gateway_0vwhwno" />
     <bpmn:sequenceFlow id="Flow_096xcdp" sourceRef="TweetUberarbeitenTask1" targetRef="Gateway_0gxn63i" />
-    <bpmn:scriptTask id="TweetTextAutomatischPrufenTask" name="Tweet-Text automatisch prüfen" scriptFormat="JavaScript" camunda:resultVariable="checkResult">
-      <bpmn:incoming>Flow_0pe345c</bpmn:incoming>
-      <bpmn:outgoing>Flow_0z4adnm</bpmn:outgoing>
-      <bpmn:script>var result;
-
-result = (tweetContent.toLowerCase().indexOf("gpi") == -1 ? "manualCheckRequired" : "rejected");</bpmn:script>
-    </bpmn:scriptTask>
     <bpmn:task id="BenutzerinformationenAuslesenTask" name="Benutzerinformationen auslesen" camunda:asyncBefore="true">
       <bpmn:incoming>Flow_09kfwsd</bpmn:incoming>
       <bpmn:outgoing>Flow_0pe345c</bpmn:outgoing>
@@ -266,7 +259,7 @@ execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetCo
         <bpmn:messageEventDefinition id="MessageEventDefinition_0aku09l" messageRef="Message_0vq440s" />
       </bpmn:startEvent>
     </bpmn:subProcess>
-    <bpmn:userTask id="TweetAnfragePrufenTask1" name="Tweet-Anfrage prüfen">
+    <bpmn:userTask id="TweetAnfragePrufenTask1" name="Tweet-Anfrage prüfen" camunda:asyncAfter="true" camunda:candidateGroups="komm">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="tweetContent" label="Eingereichter Tweet" type="string">
@@ -289,7 +282,7 @@ execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetCo
       <bpmn:incoming>JaSequenceFlow</bpmn:incoming>
       <bpmn:outgoing>Flow_14fz7kr</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="TweetUberarbeitenTask1" name="Tweet überarbeiten" camunda:assignee="${anfrageStellenderBenutzer}">
+    <bpmn:userTask id="TweetUberarbeitenTask1" name="Tweet überarbeiten" camunda:asyncAfter="true" camunda:assignee="${anfrageStellenderBenutzer}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="tweetContent" label="Eingereichter Tweet" type="string" />
@@ -306,6 +299,16 @@ execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetCo
       <bpmn:incoming>ZuUberarbeitenSequenceFlow1</bpmn:incoming>
       <bpmn:outgoing>Flow_096xcdp</bpmn:outgoing>
     </bpmn:userTask>
+    <bpmn:businessRuleTask id="TweetTextAutomatischPrufenTask" name="Tweet-Text automatisch prüfen" camunda:asyncAfter="true" camunda:decisionRef="TweetContentCombinedDecision">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="checkResult">${decisionResult.getSingleResult().result}</camunda:outputParameter>
+          <camunda:outputParameter name="checkResultComment">${decisionResult.getSingleResult().comment}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0pe345c</bpmn:incoming>
+      <bpmn:outgoing>Flow_0z4adnm</bpmn:outgoing>
+    </bpmn:businessRuleTask>
   </bpmn:process>
   <bpmn:error id="Error_0cztbkf" name="DuplicateError" errorCode="DuplicateTweet" />
   <bpmn:message id="Message_0vq440s" name="MessageCancelTwitterReview" />
@@ -585,9 +588,6 @@ execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetCo
         <di:waypoint x="423" y="898" />
         <di:waypoint x="480" y="898" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_15bz8vk_di" bpmnElement="TweetTextAutomatischPrufenTask">
-        <dc:Bounds x="480" y="858" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_00jqk1l_di" bpmnElement="BenutzerinformationenAuslesenTask">
         <dc:Bounds x="323" y="858" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -667,6 +667,9 @@ execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetCo
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0uxqrim_di" bpmnElement="TweetUberarbeitenTask1">
         <dc:Bounds x="1144" y="713" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_076w9z2_di" bpmnElement="TweetTextAutomatischPrufenTask">
+        <dc:Bounds x="480" y="858" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_1odtvf4_di" bpmnElement="MicrosoftActiveDirectoryParticipant" isHorizontal="true">
         <dc:Bounds x="120" y="1260" width="300" height="60" />
