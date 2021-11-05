@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1h1qvk6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.0">
+  <bpmn:process id="BenutzerErfassenProcess" name="Benutzer erfassen" isExecutable="true">
+    <bpmn:startEvent id="BenutzerangabenErfasstStartEvent" name="Benutzerangaben erfasst">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="username" label="Benutzername" type="string" />
+          <camunda:formField id="firstname" label="Vorname" type="string" />
+          <camunda:formField id="homeorg" label="Heimorganisation" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0etsd7d</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0etsd7d" sourceRef="BenutzerangabenErfasstStartEvent" targetRef="BenutzerInLDAPErfassenTask" />
+    <bpmn:serviceTask id="BenutzerInLDAPErfassenTask" name="Benutzer in LDAP erfassen" camunda:delegateExpression="${postUserAdapter}">
+      <bpmn:incoming>Flow_0etsd7d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yi946v</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="BenutzerErfasstEndEvent" name="Benutzer erfasst">
+      <bpmn:incoming>Flow_0yi946v</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0yi946v" sourceRef="BenutzerInLDAPErfassenTask" targetRef="BenutzerErfasstEndEvent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="BenutzerErfassenProcess">
+      <bpmndi:BPMNEdge id="Flow_0yi946v_di" bpmnElement="Flow_0yi946v">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="432" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0etsd7d_di" bpmnElement="Flow_0etsd7d">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="BenutzerangabenErfasstStartEvent">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="154" y="142" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0msia9l_di" bpmnElement="BenutzerInLDAPErfassenTask">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0make8b_di" bpmnElement="BenutzerErfasstEndEvent">
+        <dc:Bounds x="432" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="409" y="142" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
