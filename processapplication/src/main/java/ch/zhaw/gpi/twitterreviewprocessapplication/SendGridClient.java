@@ -1,9 +1,7 @@
 package ch.zhaw.gpi.twitterreviewprocessapplication;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.sendgrid.Method;
 import com.sendgrid.Request;
