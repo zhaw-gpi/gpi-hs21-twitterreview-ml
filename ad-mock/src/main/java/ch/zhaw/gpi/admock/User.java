@@ -13,6 +13,8 @@ public class User {
     private String firstName;
     private String officialName;
     private String eMail;
+    private String phoneNumber;
+    private String notificationChannel;
     @ManyToOne
     @JsonUnwrapped
     private OrgUnit homeOrganization;
@@ -43,6 +45,18 @@ public class User {
         this.eMail = eMail;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public String getNotificationChannel() {
+        return notificationChannel;
+    }
+    public void setNotificationChannel(String notificationChannel) {
+        this.notificationChannel = notificationChannel;
+    }
     public OrgUnit getHomeOrganization() {
         return homeOrganization;
     }

@@ -35,3 +35,4 @@
 ### Credentials & Co. ####
 mail.properties
 mail-template.properties
+data.sql

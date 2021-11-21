@@ -4,6 +4,8 @@ public class UserRepresentation {
     private String eMail;
     private String firstName;
     private String officialName;
+    private String phoneNumber;
+    private String notificationChannel;
     private Links _links;
 
     public String geteMail() {
@@ -30,6 +32,22 @@ public class UserRepresentation {
         this.officialName = officialName;
     }
     
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getNotificationChannel() {
+        return notificationChannel;
+    }
+
+    public void setNotificationChannel(String notificationChannel) {
+        this.notificationChannel = notificationChannel;
+    }
+
     public Links get_links() {
         return _links;
     }

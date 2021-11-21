@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_17h3771" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.0">
+  <bpmn:process id="ZeitgesteuertesTweetSenden" isExecutable="true">
+    <bpmn:startEvent id="N10SekundenVerstrichenStartEvent" name="10 Sekunden verstrichen" camunda:asyncAfter="true">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">execution.setVariable("instanceStarted", new Date().toISOString())</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_12ri6dx</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0cqii9p">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/PT10H</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_12ri6dx" sourceRef="N10SekundenVerstrichenStartEvent" targetRef="Gateway_1vpkm8p" />
+    <bpmn:parallelGateway id="Gateway_1vpkm8p">
+      <bpmn:incoming>Flow_12ri6dx</bpmn:incoming>
+      <bpmn:outgoing>Flow_19tpc3v</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0k80wx4</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_19tpc3v" sourceRef="Gateway_1vpkm8p" targetRef="TweetMitAktuellerZeitSendenDelegateTask" />
+    <bpmn:serviceTask id="TweetMitAktuellerZeitSendenDelegateTask" name="Tweet mit aktueller Zeit senden (Delegate)" camunda:asyncAfter="true" camunda:delegateExpression="${sendTweetAdapter}">
+      <bpmn:incoming>Flow_19tpc3v</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dz2b1d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0k80wx4" sourceRef="Gateway_1vpkm8p" targetRef="TweetMitAktuellerZeitSendenExternalTask" />
+    <bpmn:serviceTask id="TweetMitAktuellerZeitSendenExternalTask" name="Tweet mit aktueller Zeit senden (External)" camunda:type="external" camunda:topic="SendScheduledTweet">
+      <bpmn:incoming>Flow_0k80wx4</bpmn:incoming>
+      <bpmn:outgoing>Flow_1whe975</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1whe975" sourceRef="TweetMitAktuellerZeitSendenExternalTask" targetRef="Gateway_1vcqcpn" />
+    <bpmn:parallelGateway id="Gateway_1vcqcpn">
+      <bpmn:incoming>Flow_1whe975</bpmn:incoming>
+      <bpmn:incoming>Flow_1dz2b1d</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dl970p</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_1dz2b1d" sourceRef="TweetMitAktuellerZeitSendenDelegateTask" targetRef="Gateway_1vcqcpn" />
+    <bpmn:endEvent id="TweetZweifachGesendetEndEvent" name="Tweet zweifach gesendet">
+      <bpmn:incoming>Flow_1dl970p</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1dl970p" sourceRef="Gateway_1vcqcpn" targetRef="TweetZweifachGesendetEndEvent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ZeitgesteuertesTweetSenden">
+      <bpmndi:BPMNEdge id="Flow_1dl970p_di" bpmnElement="Flow_1dl970p">
+        <di:waypoint x="565" y="177" />
+        <di:waypoint x="612" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dz2b1d_di" bpmnElement="Flow_1dz2b1d">
+        <di:waypoint x="470" y="100" />
+        <di:waypoint x="540" y="100" />
+        <di:waypoint x="540" y="152" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1whe975_di" bpmnElement="Flow_1whe975">
+        <di:waypoint x="470" y="250" />
+        <di:waypoint x="540" y="250" />
+        <di:waypoint x="540" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0k80wx4_di" bpmnElement="Flow_0k80wx4">
+        <di:waypoint x="290" y="202" />
+        <di:waypoint x="290" y="250" />
+        <di:waypoint x="370" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19tpc3v_di" bpmnElement="Flow_19tpc3v">
+        <di:waypoint x="290" y="152" />
+        <di:waypoint x="290" y="100" />
+        <di:waypoint x="370" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12ri6dx_di" bpmnElement="Flow_12ri6dx">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="265" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_15xhmsi_di" bpmnElement="N10SekundenVerstrichenStartEvent">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="165" y="202" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1psbyas_di" bpmnElement="Gateway_1vpkm8p">
+        <dc:Bounds x="265" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1n29c6r_di" bpmnElement="TweetMitAktuellerZeitSendenDelegateTask">
+        <dc:Bounds x="370" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mxxkqh_di" bpmnElement="TweetMitAktuellerZeitSendenExternalTask">
+        <dc:Bounds x="370" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1carb2c_di" bpmnElement="Gateway_1vcqcpn">
+        <dc:Bounds x="515" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0oyc1zv_di" bpmnElement="TweetZweifachGesendetEndEvent">
+        <dc:Bounds x="612" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="593" y="202" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
