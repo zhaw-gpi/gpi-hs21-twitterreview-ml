@@ -2,6 +2,8 @@ package ch.zhaw.gpi.twitteretc;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription;
 import org.camunda.bpm.client.task.ExternalTask;
 import org.camunda.bpm.client.task.ExternalTaskHandler;
@@ -19,7 +21,8 @@ public class SendTweetTaskHandler implements ExternalTaskHandler {
 
     private Twitter twitter; 
 
-    public SendTweetTaskHandler(){
+    @PostConstruct
+    public void init(){
         twitter = TwitterFactory.getSingleton();
 
         List<Status> statuses;

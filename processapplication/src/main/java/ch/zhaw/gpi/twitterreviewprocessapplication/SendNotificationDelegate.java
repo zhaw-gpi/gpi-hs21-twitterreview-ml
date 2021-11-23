@@ -22,7 +22,7 @@ public class SendNotificationDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        String email = (String) execution.getVariable("email");
+        String email = (String) execution.getVariable("userMail");
         String phoneNumber = (String) execution.getVariable("userPhoneNumber");
         String notificationChannel = (String) execution.getVariable("userNotificationChannel");
         String checkResult = (String) execution.getVariable("checkResult");
@@ -30,7 +30,6 @@ public class SendNotificationDelegate implements JavaDelegate {
         String tweetContent = (String) execution.getVariable("tweetContent");
 
         Boolean accepted = checkResult.equals("accepted");
-
         String content = "Die folgende Tweet-Anfrage wurde " + (accepted ? "angenommen" : "abgelehnt") + ": '"
                 + tweetContent + "'" + (accepted ? "" : " Die Begründung für die Ablehnung ist: " + checkResultComment);
 
@@ -39,18 +38,15 @@ public class SendNotificationDelegate implements JavaDelegate {
                 Map<String, Object> templateData = new HashMap<>();
                 templateData.put("content", content);
                 sendGridClient.sendHtmlMail(new Email(email), new Email("scep@zhaw.ch"),
-                        "Tweet-Anfrage '" + tweetContent.substring(0, 15) + "' " + (accepted ? "angenommen" : "abgelehnt"),
-                        "d-5630cfcebdd3432cbaf1871a4e84f4b2", templateData);
+                        "Tweet-Anfrage '" + (tweetContent.length() > 15 ? tweetContent.substring(0, 15) : tweetContent) + "...' " + (accepted ? "angenommen" : "abgelehnt"),
+                        "d-7ec0a7bf6fdb4364aced652b339a68bb", templateData);
                 break;
-
             case "sms":
                 twilioClient.sendSms(phoneNumber, content);
                 break;
-
             case "voice":
                 twilioClient.notifyViaCall(phoneNumber, content);
                 break;
-
             default:
                 throw new Exception("UnsupportedNotificationChannel");
         }
