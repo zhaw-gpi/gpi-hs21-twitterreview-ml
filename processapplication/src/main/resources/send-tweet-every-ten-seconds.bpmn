@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_17h3771" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.0">
-  <bpmn:process id="ZeitgesteuertesTweetSenden" isExecutable="true">
-    <bpmn:startEvent id="N10SekundenVerstrichenStartEvent" name="10 Sekunden verstrichen" camunda:asyncAfter="true">
+  <bpmn:process id="ZeitgesteuertesTweetSenden" isExecutable="true" camunda:isStartableInTasklist="false">
+    <bpmn:startEvent id="N10SekundenVerstrichenStartEvent" name="10 Sekunden verstrichen">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="JavaScript">execution.setVariable("instanceStarted", new Date().toISOString())</camunda:script>
@@ -19,12 +19,12 @@
       <bpmn:outgoing>Flow_0k80wx4</bpmn:outgoing>
     </bpmn:parallelGateway>
     <bpmn:sequenceFlow id="Flow_19tpc3v" sourceRef="Gateway_1vpkm8p" targetRef="TweetMitAktuellerZeitSendenDelegateTask" />
-    <bpmn:serviceTask id="TweetMitAktuellerZeitSendenDelegateTask" name="Tweet mit aktueller Zeit senden (Delegate)" camunda:asyncAfter="true" camunda:delegateExpression="${sendTweetAdapter}">
+    <bpmn:serviceTask id="TweetMitAktuellerZeitSendenDelegateTask" name="Tweet mit aktueller Zeit senden (Delegate)" camunda:asyncBefore="true" camunda:asyncAfter="true" camunda:exclusive="false" camunda:delegateExpression="${sendTweetAdapter}">
       <bpmn:incoming>Flow_19tpc3v</bpmn:incoming>
       <bpmn:outgoing>Flow_1dz2b1d</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0k80wx4" sourceRef="Gateway_1vpkm8p" targetRef="TweetMitAktuellerZeitSendenExternalTask" />
-    <bpmn:serviceTask id="TweetMitAktuellerZeitSendenExternalTask" name="Tweet mit aktueller Zeit senden (External)" camunda:type="external" camunda:topic="SendScheduledTweet">
+    <bpmn:serviceTask id="TweetMitAktuellerZeitSendenExternalTask" name="Tweet mit aktueller Zeit senden (External)" camunda:asyncAfter="true" camunda:exclusive="false" camunda:type="external" camunda:topic="SendScheduledTweet">
       <bpmn:incoming>Flow_0k80wx4</bpmn:incoming>
       <bpmn:outgoing>Flow_1whe975</bpmn:outgoing>
     </bpmn:serviceTask>

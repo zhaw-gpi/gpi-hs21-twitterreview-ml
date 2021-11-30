@@ -22,7 +22,7 @@ public class SendNotificationDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        String email = (String) execution.getVariable("email");
+        String email = (String) execution.getVariable("userMail");
         String phoneNumber = (String) execution.getVariable("userPhoneNumber");
         String notificationChannel = (String) execution.getVariable("userNotificationChannel");
         String checkResult = (String) execution.getVariable("checkResult");

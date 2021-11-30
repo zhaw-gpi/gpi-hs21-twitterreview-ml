@@ -267,7 +267,7 @@ execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetCo
         </camunda:formData>
         <camunda:inputOutput>
           <camunda:inputParameter name="checkResultLocal">accepted</camunda:inputParameter>
-          <camunda:outputParameter name="checkResult">checkResultLocal</camunda:outputParameter>
+          <camunda:outputParameter name="checkResult">${checkResultLocal}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>JaSequenceFlow</bpmn:incoming>
@@ -300,7 +300,7 @@ execution.setProcessBusinessKey("T-" + anfrageStellenderBenutzer + "-" + tweetCo
       <bpmn:incoming>Flow_0pe345c</bpmn:incoming>
       <bpmn:outgoing>Flow_0z4adnm</bpmn:outgoing>
     </bpmn:businessRuleTask>
-    <bpmn:serviceTask id="BenutzerinformationenAuslesenTask" name="Benutzerinformationen auslesen" camunda:asyncBefore="true" camunda:delegateExpression="${getUserInformationAdapter}">
+    <bpmn:serviceTask id="BenutzerinformationenAuslesenTask" name="Benutzerinformationen auslesen" camunda:delegateExpression="${getUserInformationAdapter}">
       <bpmn:incoming>Flow_09kfwsd</bpmn:incoming>
       <bpmn:outgoing>Flow_0pe345c</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -529,6 +529,14 @@ execution.setVariable("checkResultComment", "Dieser Tweet wurde bereits auf Ihre
       <bpmndi:BPMNShape id="Lane_0jt8si7_di" bpmnElement="MitarbeiterLane" isHorizontal="true" bioc:stroke="rgb(30, 136, 229)" bioc:fill="rgb(187, 222, 251)">
         <dc:Bounds x="150" y="680" width="1372" height="136" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0d7xkzh_di" bpmnElement="Flow_0d7xkzh">
+        <di:waypoint x="1194" y="956" />
+        <di:waypoint x="1194" y="923" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y77yua_di" bpmnElement="Flow_1y77yua">
+        <di:waypoint x="1219" y="898" />
+        <di:waypoint x="1291" y="898" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_096xcdp_di" bpmnElement="Flow_096xcdp">
         <di:waypoint x="1194" y="713" />
         <di:waypoint x="1194" y="690" />
@@ -612,14 +620,6 @@ execution.setVariable("checkResultComment", "Dieser Tweet wurde bereits auf Ihre
         <di:waypoint x="423" y="898" />
         <di:waypoint x="480" y="898" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1y77yua_di" bpmnElement="Flow_1y77yua">
-        <di:waypoint x="1219" y="898" />
-        <di:waypoint x="1291" y="898" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0d7xkzh_di" bpmnElement="Flow_0d7xkzh">
-        <di:waypoint x="1194" y="956" />
-        <di:waypoint x="1194" y="923" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1jme1a2_di" bpmnElement="TweetEingereichtStartEvent">
         <dc:Bounds x="216" y="725" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -655,18 +655,6 @@ execution.setVariable("checkResultComment", "Dieser Tweet wurde bereits auf Ihre
         <bpmndi:BPMNLabel>
           <dc:Bounds x="689" y="836" width="87" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0vj9m2s_di" bpmnElement="TweetSendenTask">
-        <dc:Bounds x="1144" y="974" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_07v8l9j_di" bpmnElement="Gateway_07v8l9j" isMarkerVisible="true">
-        <dc:Bounds x="1169" y="873" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_16mq1w5_di" bpmnElement="AblehnungMitteilenTask">
-        <dc:Bounds x="1291" y="858" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_17xo0bv_di" bpmnElement="BestatigungMitteilenTask">
-        <dc:Bounds x="1291" y="974" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1vxv2ap_di" bpmnElement="Activity_0rk4s3o" isExpanded="true">
         <dc:Bounds x="307" y="688" width="327" height="120" />
@@ -705,6 +693,18 @@ execution.setVariable("checkResultComment", "Dieser Tweet wurde bereits auf Ihre
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0o9nwoo_di" bpmnElement="BenutzerinformationenAuslesenTask">
         <dc:Bounds x="323" y="858" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vj9m2s_di" bpmnElement="TweetSendenTask">
+        <dc:Bounds x="1144" y="974" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_07v8l9j_di" bpmnElement="Gateway_07v8l9j" isMarkerVisible="true">
+        <dc:Bounds x="1169" y="873" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16mq1w5_di" bpmnElement="AblehnungMitteilenTask">
+        <dc:Bounds x="1291" y="858" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17xo0bv_di" bpmnElement="BestatigungMitteilenTask">
+        <dc:Bounds x="1291" y="974" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1f4thf0_di" bpmnElement="DuplikatEntdecktBoundaryEvent">
         <dc:Bounds x="1176" y="956" width="36" height="36" />

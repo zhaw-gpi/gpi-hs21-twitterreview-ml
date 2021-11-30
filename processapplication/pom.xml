@@ -127,6 +127,13 @@
       <artifactId>sendgrid-java</artifactId>
       <version>4.8.0</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-bpm-process-test-coverage-junit4</artifactId>
+      <version>1.0.0</version>
+      <scope>test</scope>
+  </dependency>
   </dependencies>
 
   <!-- Konfiguration des Build-Prozesses -->
