@@ -13,21 +13,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class TwilioClient {
 
+    @Value("${phoneNumber}")
+    private String myTwilioPhoneNumber;
+
     @Autowired
     public TwilioClient(@Value("${twilioAccountSid}") String twilioAccountSid,
             @Value("${twilioAuthToken}") String twilioAuthToken) {
         Twilio.init(twilioAccountSid, twilioAuthToken);
     }
 
-    @Value("${phoneNumber}")
-    private String myTwilioPhoneNumber;
-
     public void sendSms(String to, String content) {
         Message.creator(new PhoneNumber(to), new PhoneNumber(myTwilioPhoneNumber), content).create();
     }
 
     public void notifyViaCall(String to, String content) {
-        Call.creator(new PhoneNumber(to), new PhoneNumber(myTwilioPhoneNumber), new Twiml("<Response><Say language=\"de-DE\" loop=\"2\">" + content + "</Say><Hangup/></Response>"));
+        Call.creator(new PhoneNumber(to), new PhoneNumber(myTwilioPhoneNumber),
+                new Twiml("<Response><Say language=\"de-DE\" loop=\"2\">" + content + "</Say><Hangup/></Response>")).create();
     }
-
 }
